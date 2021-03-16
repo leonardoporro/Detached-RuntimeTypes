@@ -1,9 +1,10 @@
+![Detached Banner](banner.png?raw=true)
 # Runtime Types
 #### What is it
 
 This library tries to simplify the runtime type creation by adding new things like the ability to define methods using Expressions and 
 automatic interface implementation.
-It's a part of Detached.Mappers library.
+It's a part of [Detached.Mappers](https://github.com/leonardoporro/Detached-Mapper) library.
 Thanks to the people who made [FastExpressionCompiler](https://github.com/dadhi/FastExpressionCompiler), that is the core of this library.
 
 ## What does it solve
