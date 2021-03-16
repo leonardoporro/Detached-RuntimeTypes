@@ -11,6 +11,15 @@ Thanks to the people who made [FastExpressionCompiler](https://github.com/dadhi/
  that may be a good fit for dynamic code without having to manually emit op codes. Methods can be defined using Expression trees.
 
 ### How it works
+Lets say that we want to dinamically create a type for this interface:
+```csharp
+ public interface ISumService
+ {
+     int Sum(int a, int b);
+ }
+```
+Then we need to intialize a type builder, define an implementation for Sum method using an expression tree, and 
+call AutoImplementInterface to perform the override.
 
 ```csharp
 // create a type builder, this will handle the creation of a new Type.
