@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Detached.RuntimeTypes.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1060BEF0-8969-4253-B374-A7EF18C51859}"
 	ProjectSection(SolutionItems) = preProject
+		banner.png = banner.png
 		LICENSE = LICENSE
+		logo.png = logo.png
 		README.md = README.md
 	EndProjectSection
 EndProject
