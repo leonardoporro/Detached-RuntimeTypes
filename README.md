@@ -12,7 +12,7 @@ Thanks to the people who made [FastExpressionCompiler](https://github.com/dadhi/
 
 ### How it works
 
-´´´csharp
+```csharp
 // create a type builder, this will handle the creation of a new Type.
 RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("MyISumServiceImplementation", typeof(BasePropertyClass));
 
@@ -44,7 +44,7 @@ ISumService myISumService = (ISumService)Activator.CreateInstance(myISumServiceT
 // test the implementation
 Assert.Equal(14, myISumService.Sum(5, 9));
 
-´´´
+```
 
 More info and examples will be added later.
 Check unit tests for more samples!
