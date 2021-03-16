@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Detached.RuntimeTypes", "src\Detached.RuntimeTypes\Detached.RuntimeTypes.csproj", "{4F9B72EA-2076-49F1-B073-1DD66AE82871}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82F8043B-F2EB-474A-9738-87464815B807}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AA6ED17E-A029-4B90-AC8A-F46FF55C8C74}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Detached.RuntimeTypes.Tests", "test\Detached.RuntimeTypes.Tests\Detached.RuntimeTypes.Tests.csproj", "{594AF361-BCE1-4024-9952-9C3033588F38}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1060BEF0-8969-4253-B374-A7EF18C51859}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F9B72EA-2076-49F1-B073-1DD66AE82871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9B72EA-2076-49F1-B073-1DD66AE82871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9B72EA-2076-49F1-B073-1DD66AE82871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9B72EA-2076-49F1-B073-1DD66AE82871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{594AF361-BCE1-4024-9952-9C3033588F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{594AF361-BCE1-4024-9952-9C3033588F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{594AF361-BCE1-4024-9952-9C3033588F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{594AF361-BCE1-4024-9952-9C3033588F38}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F9B72EA-2076-49F1-B073-1DD66AE82871} = {82F8043B-F2EB-474A-9738-87464815B807}
+		{594AF361-BCE1-4024-9952-9C3033588F38} = {AA6ED17E-A029-4B90-AC8A-F46FF55C8C74}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {499B90E1-BAB7-4D02-A315-98E79DFB6503}
+	EndGlobalSection
+EndGlobal
