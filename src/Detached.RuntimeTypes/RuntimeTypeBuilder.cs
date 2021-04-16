@@ -11,6 +11,19 @@ namespace Detached.RuntimeTypes
 {
     public class RuntimeTypeBuilder
     {
+        static RuntimeTypeBuilder _instance;
+
+        public static RuntimeTypeBuilder Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new RuntimeTypeBuilder();
+
+                return _instance;
+            }
+        }
+
         // hacks!!!
         static FieldInfo _methodsField = typeof(TypeBuilder).GetField("m_listMethods", BindingFlags.NonPublic | BindingFlags.Instance);
 
