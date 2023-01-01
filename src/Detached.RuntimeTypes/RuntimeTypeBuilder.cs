@@ -112,8 +112,6 @@ namespace Detached.RuntimeTypes
 
         public PropertyBuilder DefineProperty(string propertyName, Type propertyType, Expression getter, ParameterExpression value, Expression setter)
         {
-            FieldBuilder fieldBuilder = TypeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
-
             MethodAttributes methodFlags =
                 MethodAttributes.Public |
                 MethodAttributes.SpecialName |
@@ -138,7 +136,6 @@ namespace Detached.RuntimeTypes
             propertyBuilder.SetGetMethod(getterMethodBuilder);
             propertyBuilder.SetSetMethod(setterMethodBuilder);
 
-            Fields.Add(fieldBuilder.Name, fieldBuilder);
             Properties.Add(propertyBuilder.Name, propertyBuilder);
             Methods.Add(new RuntimeTypeMethod(getterMethodBuilder.Name, getterMethodBuilder, new Type[0], propertyType));
             Methods.Add(new RuntimeTypeMethod(setterMethodBuilder.Name, setterMethodBuilder, new Type[] { propertyType }, typeof(void)));
