@@ -49,11 +49,12 @@ namespace Detached.RuntimeTypes
 
         public List<RuntimeTypeMethod> Methods { get; } = new List<RuntimeTypeMethod>();
 
-        public FieldBuilder DefineField(string fieldName, Type fieldType, FieldAttributes attributes = FieldAttributes.Public)
+        public MemberExpression DefineField(string fieldName, Type fieldType, FieldAttributes attributes = FieldAttributes.Public)
         {
             FieldBuilder newField = TypeBuilder.DefineField(fieldName, fieldType, attributes);
             Fields.Add(fieldName, newField);
-            return newField;
+            
+            return Expression.Field(This, newField);
         }
 
         public PropertyBuilder DefineAutoProperty(string propertyName, Type propertyType)
@@ -95,6 +96,42 @@ namespace Detached.RuntimeTypes
             setIl.Emit(OpCodes.Nop);
             setIl.MarkLabel(exitSet);
             setIl.Emit(OpCodes.Ret);
+
+            PropertyBuilder propertyBuilder = TypeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+
+            propertyBuilder.SetGetMethod(getterMethodBuilder);
+            propertyBuilder.SetSetMethod(setterMethodBuilder);
+
+            Fields.Add(fieldBuilder.Name, fieldBuilder);
+            Properties.Add(propertyBuilder.Name, propertyBuilder);
+            Methods.Add(new RuntimeTypeMethod(getterMethodBuilder.Name, getterMethodBuilder, new Type[0], propertyType));
+            Methods.Add(new RuntimeTypeMethod(setterMethodBuilder.Name, setterMethodBuilder, new Type[] { propertyType }, typeof(void)));
+
+            return propertyBuilder;
+        }
+
+        public PropertyBuilder DefineProperty(string propertyName, Type propertyType, Expression getter, ParameterExpression value, Expression setter)
+        {
+            FieldBuilder fieldBuilder = TypeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+
+            MethodAttributes methodFlags =
+                MethodAttributes.Public |
+                MethodAttributes.SpecialName |
+                MethodAttributes.HideBySig |
+                MethodAttributes.Virtual |
+                MethodAttributes.CheckAccessOnOverride;
+
+            MethodBuilder getterMethodBuilder = DefineMethod(
+               "get_" + propertyName,
+               null,
+               getter,
+               methodFlags);
+
+            MethodBuilder setterMethodBuilder = DefineMethod(
+               "set_" + propertyName,
+               new[] { value },
+               setter,
+               methodFlags);
 
             PropertyBuilder propertyBuilder = TypeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 

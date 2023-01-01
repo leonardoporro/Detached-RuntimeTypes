@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Detached.RuntimeTypes.Reflection;
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using Xunit;
 using static Detached.RuntimeTypes.Expressions.ExtendedExpression;
 using static System.Linq.Expressions.Expression;
@@ -9,6 +11,30 @@ namespace Detached.RuntimeTypes.Tests
 {
     public class RuntimeTypeTests
     {
+        [Fact]
+        public void define_property()
+        {
+            RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("DefineAutoProperty");
+
+            var field = typeBuilder.DefineField("_testProp", typeof(int), FieldAttributes.Private);
+
+            var value = Expression.Parameter(typeof(int), "value");
+
+            typeBuilder.DefineProperty("TestProp", 
+                typeof(int),
+                field,
+                value,
+                Assign(field, value));
+
+            Type newType = typeBuilder.Create();
+            object newInstance = Activator.CreateInstance(newType);
+
+            PropertyInfo testPropInfo = newType.GetProperty("TestProp");
+            testPropInfo.SetValue(newInstance, 5);
+            int result = (int)testPropInfo.GetValue(newInstance);
+
+            Assert.Equal(5, result);
+        }
         [Fact]
         public void define_autoproperty()
         {
@@ -52,11 +78,8 @@ namespace Detached.RuntimeTypes.Tests
             RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("AccessLocalField");
 
             var field = typeBuilder.DefineField("TestField", typeof(string));
-
-            typeBuilder.DefineMethod("TestMethod",
-                null,
-                Field(typeBuilder.This, field)
-            );
+ 
+            typeBuilder.DefineMethod("TestMethod", null, field);
 
             Type newType = typeBuilder.Create();
             object newInstance = Activator.CreateInstance(newType);
