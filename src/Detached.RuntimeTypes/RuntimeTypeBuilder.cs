@@ -137,8 +137,6 @@ namespace Detached.RuntimeTypes
             propertyBuilder.SetSetMethod(setterMethodBuilder);
 
             Properties.Add(propertyBuilder.Name, propertyBuilder);
-            Methods.Add(new RuntimeTypeMethod(getterMethodBuilder.Name, getterMethodBuilder, new Type[0], propertyType));
-            Methods.Add(new RuntimeTypeMethod(setterMethodBuilder.Name, setterMethodBuilder, new Type[] { propertyType }, typeof(void)));
 
             return propertyBuilder;
         }

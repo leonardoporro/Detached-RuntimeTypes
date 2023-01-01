@@ -36,6 +36,7 @@ namespace Detached.RuntimeTypes.Tests
 
             Assert.Equal(5, result);
         }
+
         [Fact]
         public void define_autoproperty()
         {
