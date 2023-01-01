@@ -53,7 +53,7 @@ namespace Detached.RuntimeTypes
         {
             FieldBuilder newField = TypeBuilder.DefineField(fieldName, fieldType, attributes);
             Fields.Add(fieldName, newField);
-            
+
             return newField;
         }
 
@@ -124,6 +124,11 @@ namespace Detached.RuntimeTypes
                null,
                getter,
                methodFlags);
+
+            if (setter.Type != typeof(void))
+            {
+                setter = Expression.Block(typeof(void), new[] { setter });
+            }
 
             MethodBuilder setterMethodBuilder = DefineMethod(
                "set_" + propertyName,
@@ -295,7 +300,7 @@ namespace Detached.RuntimeTypes
 
             return result;
         }
-         
+
         public Type Create() => TypeBuilder.CreateTypeInfo();
 
         public static MethodInfo[] GetDeclaredMethods(TypeBuilder tb)

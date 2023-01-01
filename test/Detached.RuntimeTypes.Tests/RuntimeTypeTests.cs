@@ -1,8 +1,6 @@
-﻿using Detached.RuntimeTypes.Reflection;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Emit;
 using Xunit;
 using static Detached.RuntimeTypes.Expressions.ExtendedExpression;
 using static System.Linq.Expressions.Expression;
@@ -35,6 +33,39 @@ namespace Detached.RuntimeTypes.Tests
             int result = (int)testPropInfo.GetValue(newInstance);
 
             Assert.Equal(5, result);
+        }
+
+        [Fact]
+        public void define_property_and_iface()
+        {
+            RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("DefinePropertyAndIface");
+
+            var fieldInfo = typeBuilder.DefineField("_testProp", typeof(int), FieldAttributes.Private);
+            var field = Expression.Field(typeBuilder.This, fieldInfo);
+
+            var value = Expression.Parameter(typeof(int), "value");
+
+            typeBuilder.DefineProperty("TestProp",
+                typeof(int),
+                field,
+                value,
+                Assign(field, value));
+
+            typeBuilder.AutoImplementInterface(typeof(IDefineProperty));
+
+            Type newType = typeBuilder.Create();
+            object newInstance = Activator.CreateInstance(newType);
+
+            PropertyInfo testPropInfo = newType.GetProperty("TestProp");
+            testPropInfo.SetValue(newInstance, 5);
+            int result = (int)testPropInfo.GetValue(newInstance);
+
+            Assert.Equal(5, result);
+        }
+
+        public interface IDefineProperty
+        {
+            int TestProp { get; set; }
         }
 
         [Fact]
