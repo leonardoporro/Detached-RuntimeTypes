@@ -16,7 +16,8 @@ namespace Detached.RuntimeTypes.Tests
         {
             RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("DefineAutoProperty");
 
-            var field = typeBuilder.DefineField("_testProp", typeof(int), FieldAttributes.Private);
+            var fieldInfo = typeBuilder.DefineField("_testProp", typeof(int), FieldAttributes.Private);
+            var field = Expression.Field(typeBuilder.This, fieldInfo);
 
             var value = Expression.Parameter(typeof(int), "value");
 
@@ -38,7 +39,7 @@ namespace Detached.RuntimeTypes.Tests
         [Fact]
         public void define_autoproperty()
         {
-            RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("DefineAutoProperty");
+            RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("DefineProperty");
             typeBuilder.DefineAutoProperty("TestProp", typeof(int));
 
             Type newType = typeBuilder.Create();
@@ -77,15 +78,16 @@ namespace Detached.RuntimeTypes.Tests
         {
             RuntimeTypeBuilder typeBuilder = new RuntimeTypeBuilder("AccessLocalField");
 
-            var field = typeBuilder.DefineField("TestField", typeof(string));
- 
+            var fieldInfo = typeBuilder.DefineField("TestField", typeof(string));
+            var field = Expression.Field(typeBuilder.This, fieldInfo);
+
             typeBuilder.DefineMethod("TestMethod", null, field);
 
             Type newType = typeBuilder.Create();
             object newInstance = Activator.CreateInstance(newType);
 
-            FieldInfo fieldInfo = newType.GetField("TestField");
-            fieldInfo.SetValue(newInstance, "testValue");
+            var fieldToSet = newType.GetField("TestField");
+            fieldToSet.SetValue(newInstance, "testValue");
             MethodInfo testMethodInfo = newType.GetMethod("TestMethod");
             object result = testMethodInfo.Invoke(newInstance, null);
 

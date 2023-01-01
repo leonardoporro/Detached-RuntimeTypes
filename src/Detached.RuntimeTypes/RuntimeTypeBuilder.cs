@@ -49,12 +49,12 @@ namespace Detached.RuntimeTypes
 
         public List<RuntimeTypeMethod> Methods { get; } = new List<RuntimeTypeMethod>();
 
-        public MemberExpression DefineField(string fieldName, Type fieldType, FieldAttributes attributes = FieldAttributes.Public)
+        public FieldBuilder DefineField(string fieldName, Type fieldType, FieldAttributes attributes = FieldAttributes.Public)
         {
             FieldBuilder newField = TypeBuilder.DefineField(fieldName, fieldType, attributes);
             Fields.Add(fieldName, newField);
             
-            return Expression.Field(This, newField);
+            return newField;
         }
 
         public PropertyBuilder DefineAutoProperty(string propertyName, Type propertyType)
