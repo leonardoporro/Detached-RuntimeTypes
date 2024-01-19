@@ -58,6 +58,4 @@ Assert.Equal(14, myISumService.Sum(5, 9));
 
 More info and examples will be added later.
 Check unit tests for more samples!
-
-### NOTE: This library is in an early stage, so that, side effects of compiled types may occur and are yet undetected.
-### Any help on debugging, or adding new features is very welcome!
+ 
