@@ -1,0 +1,38 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0
+
+    - name: Extract Version from Branch
+      id: extract_version
+      run: echo "::set-output name=version::$(echo $GITHUB_REF | sed 's/^refs\/heads\/release\///')"
+
+    - name: Build and Pack
+      run: |
+        dotnet restore
+        dotnet build --configuration Release
+        dotnet pack --configuration Release --no-build --output nupkg /p:Version=${{ steps.extract_version.outputs.version }}
+
+    - name: Publish to NuGet
+      uses: nuget/publish@v2
+      with:
+        nuget-api-key: ${{secrets.NUGET_API_KEY}}
+        nuget-version: 5.x
+        nuget-publish-retry-count: 3
+        nuget-publish-retry-interval: 1000
+        packages: '**/*.nupkg'
