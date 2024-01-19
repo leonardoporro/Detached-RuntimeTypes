@@ -29,4 +29,4 @@ jobs:
         dotnet pack --configuration Release --no-build --output nupkg /p:Version=${{ steps.extract_version.outputs.version }}
 
     - name: Publish to NuGet
-      run: dotnet nuget push ./**/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }}
