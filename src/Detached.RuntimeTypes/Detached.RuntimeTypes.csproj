@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>6.0.5</Version>
+    <TargetFrameworks>net8.0;net7.0;net6.0;</TargetFrameworks>
+    <Version>$(Version)</Version>
     <Authors>Leonardo Porro</Authors>
     <Company>Leonardo Porro</Company>
     <Product>Detached Dynamic Type builder library</Product>
@@ -11,14 +11,14 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/leonardoporro/Detached-RuntimeTypes</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
-    <RepositoryUrl>https://github.com/leonardoporro/Detached-RuntimeTypes</RepositoryUrl>
-    <PackageReleaseNotes>First version as a standalone package.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/leonardoporro/Detached-RuntimeTypes</RepositoryUrl> 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>reflection, emit, dynamic, dynamic-type, dynamic-method,proxy,patch,INotifyPropertyChange</PackageTags>
+    <Title>Runtime Types</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
+	
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
   </ItemGroup>
@@ -31,6 +31,10 @@
     <None Include="..\..\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
