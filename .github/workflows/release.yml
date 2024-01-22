@@ -27,7 +27,7 @@ jobs:
     - name: Build
       run: | 
         dotnet restore
-        dotnet build --configuration Release
+        dotnet build --configuration Release -p:Version=${{ steps.extract-version.outputs.version }}
     - name: Push
       run: | 
         packages=$(find . -name '*.nupkg')
