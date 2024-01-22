@@ -18,32 +18,27 @@ jobs:
       with:
         dotnet-version: '8.x.x' # You can adjust the version if needed
 
-    - name: Extract version from branch name
+    - name: Extract version
       run: |
         # Extract version from the branch name (assuming the branch name format is release/x.y.z)
         version=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')
         echo "Version extracted from branch name: $version"
       id: extract-version
 
-    - name: Build and pack NuGet packages
+    - name: Build
       run: |
         # Restore dependencies and build the code
         dotnet restore
         dotnet build --configuration Release
-
+    - name: Push
+      run: |
         # Find all projects in the repository
-        projects=$(find . -name '*.csproj')
+        packages=$(find . -name '*.nupkg')
 
-        # Pack each project with the extracted version
-        for project in $projects; do
-          # Use dotnet pack with the specified version
-          dotnet pack $project -c Release -o ./artifacts --version-suffix ${{ steps.extract-version.outputs.version }}
+        echo ${{ steps.extract-version.outputs.version }}
 
-          # Print each file found
-          echo "Found file: ./artifacts/$(basename $project .csproj).$version.nupkg"
-
-          # Push the NuGet package to nuget.org
-          dotnet nuget push ./artifacts/$(basename $project .csproj).$version.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
+        for package in $packages; do
+           echo $package
         done
  
       env:
