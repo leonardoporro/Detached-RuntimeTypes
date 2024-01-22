@@ -10,20 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set up .NET Core
+    - name: Set up .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x.x' # You can adjust the version if needed
 
-    - name: Build and publish NuGet packages
+    - name: Build
       run: |
         # Restore dependencies, build the code, and publish NuGet packages
         dotnet restore
         dotnet build --configuration Release
-
+        
+    - name: Publish
+      run: |
         # Specify the subfolders where NuGet packages are located
         for packageDir in $(find . -name bin -type d -print | grep '/Release/'); do
           pushd $packageDir
