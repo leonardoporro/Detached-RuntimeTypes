@@ -21,8 +21,7 @@ jobs:
     - name: Extract version from branch name
       run: |
         # Extract version from the branch name (assuming the branch name format is release/x.y.z)
-        echo "VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')" >> $GITHUB_ENV
-
+        version=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')
         echo "Version extracted from branch name: $version"
       id: extract-version
 
