@@ -1,36 +1,40 @@
-name: Publish
+name: Release
 
 on:
-  push:
+  create:
     branches:
       - 'release/*'
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.x.x
+        dotnet-version: '8.x.x' # You can adjust the version if needed
 
-    - name: Extract Version from Branch
-      id: extract_version
-      run: echo "::set-output name=version::$(echo $GITHUB_REF | sed 's/^refs\/heads\/release\///')"
-
-    - name: Build and Pack
+    - name: Build and publish NuGet packages
       run: |
+        # Restore dependencies, build the code, and publish NuGet packages
         dotnet restore
         dotnet build --configuration Release
-        dotnet pack --configuration Release --no-build --output nupkg /p:Version=${{ steps.extract_version.outputs.version }}
 
-    - name: Publish to NuGet
-      run: |
-        for package in $(find bin -name '*.nupkg'); do
-          echo "Publishing $package"
-          dotnet nuget push "$package" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-        donev
+        # Specify the subfolders where NuGet packages are located
+        for packageDir in $(find . -name bin -type d -print | grep '/Release/'); do
+          pushd $packageDir
+
+          # Extract package name and version from the directory path
+          packagePath=$(pwd)
+          packageName=$(basename $packagePath)
+          packageVersion=$(basename $(dirname $packagePath))
+
+          # Publish the NuGet package to nuget.org
+          dotnet nuget push $packageName.$packageVersion.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+
+          popd
+        done 
