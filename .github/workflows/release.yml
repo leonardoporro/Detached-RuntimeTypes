@@ -20,7 +20,7 @@ jobs:
  
     - name: Build
       run: | 
-        version=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')"
+        version=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')
         echo $version
         dotnet restore
         dotnet build --configuration Release -p:Version=$version
