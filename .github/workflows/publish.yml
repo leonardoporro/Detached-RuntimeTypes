@@ -29,4 +29,8 @@ jobs:
         dotnet pack --configuration Release --no-build --output nupkg /p:Version=${{ steps.extract_version.outputs.version }}
 
     - name: Publish to NuGet
-      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }}
+      run: |
+        for package in $(find bin -name '*.nupkg'); do
+          echo "Publishing $package"
+          dotnet nuget push "$package" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        donev
