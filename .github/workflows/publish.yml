@@ -1,4 +1,4 @@
-name: Release
+name: Release Workflow
 
 on:
   create:
@@ -10,33 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.x.x' # You can adjust the version if needed
+        dotnet-version: '3.1' # You can adjust the version if needed
 
-    - name: Build
+    - name: Extract version from branch name
       run: |
-        # Restore dependencies, build the code, and publish NuGet packages
+        # Extract version from the branch name (assuming the branch name format is release/x.y.z)
+        version=$(echo "${{ github.ref }}" | sed 's/refs\/heads\/release\///')
+
+        echo "Version extracted from branch name: $version"
+      id: extract-version
+
+    - name: Build and pack NuGet packages
+      run: |
+        # Restore dependencies and build the code
         dotnet restore
         dotnet build --configuration Release
-        
-    - name: Publish
-      run: |
-        # Specify the subfolders where NuGet packages are located
-        for packageDir in $(find . -name bin -type d -print | grep '/Release/'); do
-          pushd $packageDir
 
-          # Extract package name and version from the directory path
-          packagePath=$(pwd)
-          packageName=$(basename $packagePath)
-          packageVersion=$(basename $(dirname $packagePath))
+        # Find all projects in the repository
+        projects=$(find . -name '*.csproj')
 
-          # Publish the NuGet package to nuget.org
-          dotnet nuget push $packageName.$packageVersion.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        # Pack each project with the extracted version
+        for project in $projects; do
+          # Use dotnet pack with the specified version
+          dotnet pack $project -c Release -o ./artifacts --version-suffix $version
 
-          popd
-        done 
+          # Print each file found
+          echo "Found file: ./artifacts/$(basename $project .csproj).$version.nupkg"
+
+          # Push the NuGet package to nuget.org
+          dotnet nuget push ./artifacts/$(basename $project .csproj).$version.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
+        done
+
+        # Optionally, you can use ${{ steps.extract-version.outputs.version }} in further steps for version-specific actions.
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
